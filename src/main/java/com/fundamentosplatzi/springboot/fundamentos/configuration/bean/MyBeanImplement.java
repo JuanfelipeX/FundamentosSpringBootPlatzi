@@ -1,4 +1,4 @@
-package com.fundamentosplatzi.springboot.fundamentos.bean;
+package com.fundamentosplatzi.springboot.fundamentos.configuration.bean;
 
 public class MyBeanImplement implements MyBean{
     @Override
