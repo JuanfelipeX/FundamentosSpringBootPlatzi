@@ -11,13 +11,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<Post, Long> {
-    void save(User user);
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("Select u from User Where u.email =?1")
+    @Query("Select u from User Where u.email=?1")
     Optional<User> findByUserEmail(String email);
 
     @Query("select u from User u where u.name like ?1%")
     List<User> findByAndSort(String name, Sort sort);
+
+    List<User> findByName(String name);
+
+    Optional<User> findByEmailAndName(String email, String name);
+
+
 
 }
