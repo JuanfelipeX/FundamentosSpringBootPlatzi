@@ -65,19 +65,47 @@ public class FundamentosApplication implements CommandLineRunner {
 	}
 
 	private void getInformationJqplFromUser(){
+
 		LOGGER.info("Usuario con el metodo findByUserEmail  " +
 				userRepository.findByUserEmail("john69@konrda.com")
 				.orElseThrow(() -> new RuntimeException("No se encontro el usuario")));
+
+
 		userRepository.findByUserEmail("john69@konrda.com");
+
 
 		userRepository.findByAndSort("user", Sort.by("id").descending())
 				.stream().forEach(user -> LOGGER.info("Usuario con metodo  sort  " + user));
 
+
 		userRepository.findByName("john")
 				.stream().forEach(user -> LOGGER.info("Usuario con query method " + user));
 
+
 		LOGGER.info("Usuario encontrado con query method findByEmailAndName " + userRepository.findByEmailAndName("pacheco@konra.com", "pacheco")
 				.orElseThrow(() -> new RuntimeException("Uusario no encontrado")));
+
+
+		userRepository.findByNameLike("%user%")
+				.stream().forEach(user -> LOGGER.info("Usuario findByNameLike " + user));
+
+
+		userRepository.findByNameOrEmail(null, "john69@konrda.com")
+				.stream().forEach(user -> LOGGER.info("Usuario findByNameOrEmail " + user));
+
+
+		userRepository.findByBirthDateBetween(LocalDate.of(2010, 3, 1), LocalDate.of(2022, 3, 9))
+				.stream().forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
+
+
+		userRepository.findByNameLikeOrderByIdDesc("%user%")
+				.stream().forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
+
+
+		userRepository.findByNameLikeContainOrderByIdDesc("user")
+				.stream().forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
+
+
 	}
 
 	private void ejemplosAnteriores(){
