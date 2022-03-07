@@ -3,6 +3,7 @@ package com.fundamentosplatzi.springboot.fundamentos;
 import com.fundamentosplatzi.springboot.fundamentos.configuration.bean.MyBean;
 import com.fundamentosplatzi.springboot.fundamentos.configuration.bean.MyBeanWithProperties;
 import com.fundamentosplatzi.springboot.fundamentos.component.ComponentDependency;
+import com.fundamentosplatzi.springboot.fundamentos.dto.UserDto;
 import com.fundamentosplatzi.springboot.fundamentos.entity.User;
 import com.fundamentosplatzi.springboot.fundamentos.pojo.UserPojo;
 import com.fundamentosplatzi.springboot.fundamentos.repository.UserRepository;
@@ -12,11 +13,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class FundamentosApplication implements CommandLineRunner {
@@ -82,7 +86,8 @@ public class FundamentosApplication implements CommandLineRunner {
 				.stream().forEach(user -> LOGGER.info("Usuario con query method " + user));
 
 
-		LOGGER.info("Usuario encontrado con query method findByEmailAndName " + userRepository.findByEmailAndName("pacheco@konra.com", "pacheco")
+		LOGGER.info("Usuario encontrado con query method findByEmailAndName "
+				+ userRepository.findByEmailAndName("pacheco@konra.com", "pacheco")
 				.orElseThrow(() -> new RuntimeException("Uusario no encontrado")));
 
 
@@ -94,7 +99,8 @@ public class FundamentosApplication implements CommandLineRunner {
 				.stream().forEach(user -> LOGGER.info("Usuario findByNameOrEmail " + user));
 
 
-		userRepository.findByBirthDateBetween(LocalDate.of(2010, 3, 1), LocalDate.of(2022, 3, 9))
+		userRepository.findByBirthDateBetween(
+				LocalDate.of(2010, 3, 1), LocalDate.of(2022, 3, 9))
 				.stream().forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
 
 
@@ -104,6 +110,11 @@ public class FundamentosApplication implements CommandLineRunner {
 
 		userRepository.findByNameLikeContainOrderByIdDesc("user")
 				.stream().forEach(user -> LOGGER.info("Usuario findByBirthDateBetween " + user));
+
+		LOGGER.info("El usuario a partir del named parameter es: " + userRepository.getAllByBirthDateAndEmail(
+				LocalDate.of(2022, 03, 03), "john69@konrda.com" )
+				.orElseThrow(() -> new RuntimeException("No se encontro el usuario a partir del named parameter")));
+
 
 
 	}
