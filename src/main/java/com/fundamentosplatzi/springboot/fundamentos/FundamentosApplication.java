@@ -7,6 +7,7 @@ import com.fundamentosplatzi.springboot.fundamentos.dto.UserDto;
 import com.fundamentosplatzi.springboot.fundamentos.entity.User;
 import com.fundamentosplatzi.springboot.fundamentos.pojo.UserPojo;
 import com.fundamentosplatzi.springboot.fundamentos.repository.UserRepository;
+import com.fundamentosplatzi.springboot.fundamentos.service.UserService;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -26,23 +27,21 @@ import java.util.Optional;
 public class FundamentosApplication implements CommandLineRunner {
 
 	private ComponentDependency componentDependency;
-
 	private MyBean myBean;
-
 	private MyBeanWithProperties myBeanWithProperties;
-
 	private UserPojo userPojo;
-
 	private final Log LOGGER = LogFactory.getLog(FundamentosApplication.class);
-
 	private UserRepository userRepository;
+	private UserService userService;
 
-	public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository){
+
+	public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository, UserService userService){
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	@Override
@@ -50,6 +49,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		//ejemplosAnteriores();
 		saveUserInDataBase();
 		getInformationJqplFromUser();
+		saveWithErrorTransactional();
 
 	}
 
@@ -115,8 +115,6 @@ public class FundamentosApplication implements CommandLineRunner {
 				LocalDate.of(2022, 03, 03), "john69@konrda.com" )
 				.orElseThrow(() -> new RuntimeException("No se encontro el usuario a partir del named parameter")));
 
-
-
 	}
 
 	private void ejemplosAnteriores(){
@@ -131,5 +129,21 @@ public class FundamentosApplication implements CommandLineRunner {
 			LOGGER.error("Esto es un error del aplicativo");
 		}
 	}
+
+	private void saveWithErrorTransactional(){
+		User test1 = new User("TestTransactional1", "TestTransactional1@domain.com", LocalDate.now());
+		User test2 = new User("TestTransactional2", "TestTransactional2@domain.com", LocalDate.now());
+		User test3 = new User("TestTransactional3", "TestTransactional3@domain.com", LocalDate.now());
+		User test4 = new User("TestTransactional4", "TestTransactional4@domain.com", LocalDate.now());
+
+		List<User> users = Arrays.asList(test1, test2, test3, test4 );
+
+		userService.saveTransactional(users);
+
+		userService.getAllUsers()
+				.stream().forEach(user -> LOGGER.info("Este es el usuario del metodo transaccional" + user));
+	}
+
+
 
 }
