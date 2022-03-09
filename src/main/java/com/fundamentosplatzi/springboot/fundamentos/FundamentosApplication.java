@@ -138,10 +138,14 @@ public class FundamentosApplication implements CommandLineRunner {
 
 		List<User> users = Arrays.asList(test1, test2, test3, test4 );
 
-		userService.saveTransactional(users);
-
+		try{
+			userService.saveTransactional(users);
+		}catch (Exception e){
+			LOGGER.error("Esta es una excepcion dentro del metodo transational" + e);
+		}
 		userService.getAllUsers()
-				.stream().forEach(user -> LOGGER.info("Este es el usuario del metodo transaccional" + user));
+				.stream()
+				.forEach(user -> LOGGER.info("Este es el usuario dentro del metodo Transational :" + user));
 	}
 
 
