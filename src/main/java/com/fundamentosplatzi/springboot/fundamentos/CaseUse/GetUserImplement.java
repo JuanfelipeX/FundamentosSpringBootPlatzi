@@ -1,4 +1,4 @@
-package com.fundamentosplatzi.springboot.fundamentos.CaseUser;
+package com.fundamentosplatzi.springboot.fundamentos.CaseUse;
 
 import com.fundamentosplatzi.springboot.fundamentos.entity.User;
 import com.fundamentosplatzi.springboot.fundamentos.service.UserService;
